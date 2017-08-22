@@ -1,0 +1,44 @@
+{% include "base.html" %}
+{% block content_block %}
+    <div class="starter-template" align="center">
+        <br>
+        <br>
+        <br>
+
+        <h3><p class="lead">Predict Invalidation Patent with Machine Learning  Model</p></h3>
+
+        <p>Try out our prediction model with your own patent claim right here !</p>
+        <p>
+            <form class="form-horizontal" name="patent_predict" method="post" >
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="form-group">
+                    <label for="patentid" class="col-sm-2 control-label">Patent Application Number:</label>
+                    <input type="text" class="form-control" id="patentid" placeholder="US20170101000">
+                </div>
+                <div class="form-group">
+                    <label for="claim" class="col-sm-2 control-label">Patent Claim Text:</label>
+                    <textarea class="form-control" id='claim' name="claim" rows="3"></textarea>
+                </div>
+                {% if submit %}
+                    <input class="btn-primary btn" type="submit" name="submit" value="Submit"/>
+                {% elif result %}
+                    <p>The Top5 most similar patents to your own patent with our prediction model:</p>
+                    <p>{{}}</p>
+                    <div class="table-responsive">
+                        <table class="table table-hover ">
+                            <h3><tr><th>PatentID</th><th>Similarity</th></tr></h3>
+                            {% for patentid,sim in prediction%}
+                            <tr><td>{{ patentid }} </td><td>{{ sim }} </td></tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <input class="btn-primary btn" type="submit" name="result" value="OK"/>
+                {% else %}
+                    <p><h2>Thank you!</h2></p>
+                    <p><a href="predict">Click here to submit another.</a></p>
+                {% endif %}
+            </form>
+    </div>
+{% endblock %}
+
